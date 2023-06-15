@@ -253,6 +253,68 @@ definition {
 		Notifications.viewBadgeCount(notificationCount = 0);
 	}
 
+	@description = "Validate if subscribed tags can be seen in Subscribed tab if not shown on the first page of Tags tab"
+	test CanViewPaginatedTags {
+		JSONMBMessage.addCategory(
+			categoryDescription = "Description",
+			categoryName = "Test Topic",
+			userEmailAddress = "test@liferay.com");
+
+		JSONAssettag.addTag(
+			groupName = "Guest",
+			tagName = "test_tag");
+
+		Navigator.gotoPage(pageName = "Questions Page");
+
+		Questions.openToTagsTab(
+			layoutName = "questions-page",
+			siteURLKey = "guest");
+
+		Questions.subscribeFromTag();
+
+		Questions.askQuestionFillingTheMandatoryFields(
+			contentField = "Body CanViewPaginatedTags1",
+			layoutName = "questions-page",
+			siteURLKey = "guest",
+			tagLocatorList = "Tag1,Tag2,Tag3,Tag4,Tag5",
+			titleField = "Q1",
+			topicName = "test-topic");
+
+		Questions.askQuestionFillingTheMandatoryFields(
+			contentField = "Body CanViewPaginatedTags2",
+			layoutName = "questions-page",
+			siteURLKey = "guest",
+			tagLocatorList = "Tag6,Tag7,Tag8,Tag9,Tag10",
+			titleField = "Q2",
+			topicName = "test-topic");
+
+		Questions.askQuestionFillingTheMandatoryFields(
+			contentField = "Body CanViewPaginatedTags3",
+			layoutName = "questions-page",
+			siteURLKey = "guest",
+			tagLocatorList = "Tag11,Tag12,Tag13,Tag14,Tag15",
+			titleField = "Q3",
+			topicName = "test-topic");
+
+		Questions.askQuestionFillingTheMandatoryFields(
+			contentField = "Body CanViewPaginatedTags4",
+			layoutName = "questions-page",
+			siteURLKey = "guest",
+			tagLocatorList = "Tag16,Tag17,Tag18,Tag19,Tag20",
+			titleField = "Q4",
+			topicName = "test-topic");
+
+		Navigator.gotoPage(pageName = "Questions Page");
+
+		Questions.openToTagsTab(
+			layoutName = "questions-page",
+			siteURLKey = "guest");
+
+		Click(locator1 = "Pagination#NEXT_LINK");
+
+		Questions.gotoTab(questionTabField = "Subscriptions");
+	}
+
 	@description = "Validate if when the user click in the tag of the Tags tab, the user is redirected to the questions that use this tag"
 	@priority = 3
 	@refactordone
