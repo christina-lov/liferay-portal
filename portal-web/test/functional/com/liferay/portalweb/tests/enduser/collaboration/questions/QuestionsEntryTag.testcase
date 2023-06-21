@@ -253,66 +253,77 @@ definition {
 		Notifications.viewBadgeCount(notificationCount = 0);
 	}
 
-	@description = "Validate if subscribed tags can be seen in Subscribed tab if not shown on the first page of Tags tab"
+	@description = "LPS-180529 | Validate if subscribed tags can be seen in Subscribed tab if not shown on the first page of Tags tab"
+	@priority = 3
 	test CanViewPaginatedTags {
-		JSONMBMessage.addCategory(
-			categoryDescription = "Description",
-			categoryName = "Test Topic",
-			userEmailAddress = "test@liferay.com");
+		task ("Given a tag and the user is subscribed to the tag") {
+			JSONMBMessage.addCategory(
+				categoryDescription = "Description",
+				categoryName = "Test Topic",
+				userEmailAddress = "test@liferay.com");
 
-		JSONAssettag.addTag(
-			groupName = "Guest",
-			tagName = "test_tag");
+			JSONAssettag.addTag(
+				groupName = "Guest",
+				tagName = "test_tag");
 
-		Navigator.gotoPage(pageName = "Questions Page");
+			Navigator.gotoPage(pageName = "Questions Page");
 
-		Questions.openToTagsTab(
-			layoutName = "questions-page",
-			siteURLKey = "guest");
+			Questions.openToTagsTab(
+				layoutName = "questions-page",
+				siteURLKey = "guest");
 
-		Questions.subscribeFromTag();
+			Questions.subscribeFromTag();
+		}
 
-		Questions.askQuestionFillingTheMandatoryFields(
-			contentField = "Body CanViewPaginatedTags1",
-			layoutName = "questions-page",
-			siteURLKey = "guest",
-			tagLocatorList = "Tag1,Tag2,Tag3,Tag4,Tag5",
-			titleField = "Q1",
-			topicName = "test-topic");
+		task ("and there are multiple tags in the system") {
+			Questions.askQuestionFillingTheMandatoryFields(
+				contentField = "Body CanViewPaginatedTags1",
+				layoutName = "questions-page",
+				siteURLKey = "guest",
+				tagLocatorList = "Tag1,Tag2,Tag3,Tag4,Tag5",
+				titleField = "Q1",
+				topicName = "test-topic");
 
-		Questions.askQuestionFillingTheMandatoryFields(
-			contentField = "Body CanViewPaginatedTags2",
-			layoutName = "questions-page",
-			siteURLKey = "guest",
-			tagLocatorList = "Tag6,Tag7,Tag8,Tag9,Tag10",
-			titleField = "Q2",
-			topicName = "test-topic");
+			Questions.askQuestionFillingTheMandatoryFields(
+				contentField = "Body CanViewPaginatedTags2",
+				layoutName = "questions-page",
+				siteURLKey = "guest",
+				tagLocatorList = "Tag6,Tag7,Tag8,Tag9,Tag10",
+				titleField = "Q2",
+				topicName = "test-topic");
 
-		Questions.askQuestionFillingTheMandatoryFields(
-			contentField = "Body CanViewPaginatedTags3",
-			layoutName = "questions-page",
-			siteURLKey = "guest",
-			tagLocatorList = "Tag11,Tag12,Tag13,Tag14,Tag15",
-			titleField = "Q3",
-			topicName = "test-topic");
+			Questions.askQuestionFillingTheMandatoryFields(
+				contentField = "Body CanViewPaginatedTags3",
+				layoutName = "questions-page",
+				siteURLKey = "guest",
+				tagLocatorList = "Tag11,Tag12,Tag13,Tag14,Tag15",
+				titleField = "Q3",
+				topicName = "test-topic");
 
-		Questions.askQuestionFillingTheMandatoryFields(
-			contentField = "Body CanViewPaginatedTags4",
-			layoutName = "questions-page",
-			siteURLKey = "guest",
-			tagLocatorList = "Tag16,Tag17,Tag18,Tag19,Tag20",
-			titleField = "Q4",
-			topicName = "test-topic");
+			Questions.askQuestionFillingTheMandatoryFields(
+				contentField = "Body CanViewPaginatedTags4",
+				layoutName = "questions-page",
+				siteURLKey = "guest",
+				tagLocatorList = "Tag16,Tag17,Tag18,Tag19,Tag20",
+				titleField = "Q4",
+				topicName = "test-topic");
+		}
 
-		Navigator.gotoPage(pageName = "Questions Page");
+		task ("When the user navigates to the Questions page to view the subscribed tag") {
+			Navigator.gotoPage(pageName = "Questions Page");
 
-		Questions.openToTagsTab(
-			layoutName = "questions-page",
-			siteURLKey = "guest");
+			Questions.openToTagsTab(
+				layoutName = "questions-page",
+				siteURLKey = "guest");
 
-		Click(locator1 = "Pagination#NEXT_LINK");
+			Click(locator1 = "Pagination#NEXT_LINK");
 
-		Questions.gotoTab(questionTabField = "Subscriptions");
+			Questions.gotoTab(questionTabField = "Subscriptions");
+		}
+
+		task ("Then the user should be able to view the tag") {
+			Questions.viewSubscribedTag(subscribedTag = "test_tag");
+		}
 	}
 
 	@description = "Validate if when the user click in the tag of the Tags tab, the user is redirected to the questions that use this tag"
